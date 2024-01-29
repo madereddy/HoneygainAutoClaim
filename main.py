@@ -12,6 +12,8 @@ import logging
 import os
 import shutil
 import sys
+import schedule
+import time
 from configparser import ConfigParser
 from getpass import getpass
 
@@ -24,6 +26,12 @@ from requests import Response
 config_folder: str = 'Config'
 token_file: str = f'{config_folder}/HoneygainToken.json'
 config_path: str = f'{config_folder}/HoneygainConfig.toml'
+
+# Run scheduler
+if os.gentenv('TIME') != "":
+    schedule.every().day.at("10:30").do(main)
+else:
+    schedule.every().day.at(f"{time}").do(main)
 
 # Creates a Logs folder
 if not os.path.exists('Logs'):
@@ -463,17 +471,17 @@ def main() -> None:
         # Header for all further requests
         header: dict[str, str] = {'Authorization': f'Bearer {token}'}
 
-        if not achievements_claim(s, header):
-            logging.error('%sFailed to claim achievements.', RED)
-
-        pot_winning = pot_winnings(s, header)
-
         # Checks if the user wants to claim the lucky pot and do so if the pot isn't claimed yet.
         if settings['lucky_pot'] and pot_winning['data']['winning_credits'] is None:
             pot_claim(s, header)
 
         got_pot_winning = pot_winnings(s, header)
         logging.info(f'%sWon today {got_pot_winning["data"]["winning_credits"]} Credits.', WHITE)
+
+        if not achievements_claim(s, header):
+            logging.error('%sFailed to claim achievements.', RED)
+
+        pot_winning = pot_winnings(s, header)
 
         balance = get_balance(s, header)
         logging.info(f'%sYou currently have {balance["data"]["payout"]["credits"]} Credits.', WHITE)
