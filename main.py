@@ -27,12 +27,6 @@ config_folder: str = 'Config'
 token_file: str = f'{config_folder}/HoneygainToken.json'
 config_path: str = f'{config_folder}/HoneygainConfig.toml'
 
-# Run scheduler
-if os.getenv('TIME') != "":
-    schedule.every().day.at("10:30").do(main)
-else:
-    schedule.every().day.at(f"{time}").do(main)
-
 # Creates a Logs folder
 if not os.path.exists('Logs'):
     os.mkdir('Logs')
@@ -486,6 +480,11 @@ def main() -> None:
         balance = get_balance(s, header)
         logging.info(f'%sYou currently have {balance["data"]["payout"]["credits"]} Credits.', WHITE)
 
+# Run scheduler
+if os.getenv('TIME') != "":
+    schedule.every().day.at("10:30").do(main)
+else:
+    schedule.every().day.at(f"{time}").do(main)
 
 if __name__ == '__main__':
     main()
