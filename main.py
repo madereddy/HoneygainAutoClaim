@@ -12,11 +12,10 @@ import logging
 import os
 import shutil
 import sys
-import schedule
 import time
 from configparser import ConfigParser
 from getpass import getpass
-
+import schedule
 import colorama
 import requests
 from colorama import Fore
