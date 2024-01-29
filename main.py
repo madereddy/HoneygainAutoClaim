@@ -28,7 +28,7 @@ token_file: str = f'{config_folder}/HoneygainToken.json'
 config_path: str = f'{config_folder}/HoneygainConfig.toml'
 
 # Run scheduler
-if os.gentenv('TIME') != "":
+if os.getenv('TIME') != "":
     schedule.every().day.at("10:30").do(main)
 else:
     schedule.every().day.at(f"{time}").do(main)
