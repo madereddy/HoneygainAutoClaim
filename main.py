@@ -465,6 +465,8 @@ def main() -> None:
         # Header for all further requests
         header: dict[str, str] = {'Authorization': f'Bearer {token}'}
 
+        pot_winning = pot_winnings(s, header)
+
         # Checks if the user wants to claim the lucky pot and do so if the pot isn't claimed yet.
         if settings['lucky_pot'] and pot_winning['data']['winning_credits'] is None:
             pot_claim(s, header)
@@ -474,8 +476,6 @@ def main() -> None:
 
         if not achievements_claim(s, header):
             logging.error('%sFailed to claim achievements.', RED)
-
-        pot_winning = pot_winnings(s, header)
 
         balance = get_balance(s, header)
         logging.info(f'%sYou currently have {balance["data"]["payout"]["credits"]} Credits.', WHITE)
